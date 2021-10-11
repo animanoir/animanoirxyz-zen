@@ -1,4 +1,4 @@
-console.log("three.module.js loaded.")
+console.log('three.js.module loaded.')
 
 /**
  * @license

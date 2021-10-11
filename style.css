@@ -1,9 +1,111 @@
 @import "normalize.css";
+@import url('https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@700&family=Roboto+Condensed:wght@300&display=swap');
 
 * {
   color: white;
 }
 
+html,
+body
+{
+    overflow: hidden;
+}
+
+canvas{
+  margin: 0;
+  padding: 0;
+}
 body {
   background-color: black;
+}
+
+#fixed-frame{
+  position: fixed;
+  width: 100vw;
+  z-index: 100;
+  padding: 1rem;
+}
+
+#three{
+    position: relative;
+    top: 0;
+    left: 0;
+    outline: none;
+    overflow: hidden;
+}
+
+#title{
+  margin: 0;
+  font-family: 'Josefin Sans', sans-serif;
+}
+
+#nowPlaying{
+  font-family: 'Roboto Condensed', sans-serif;
+  margin: 0;
+  color: rgba(255, 255, 255, 0.31);
+}
+
+#musicData {
+  font-family: serif;
+  color: white;
+}
+
+#backgroundNoise {
+  top: -10rem;
+  left: -10rem;
+  width: calc(100% + 20rem);
+  height: calc(100% + 20rem);
+  z-index: 1000;
+  position: fixed;
+  pointer-events: none;
+  background-position: 50%;
+  background-image: url('./assets/noise-1.png');
+  pointer-events: none;
+  animation: backgroundNoise 1s steps(2) infinite;
+}
+
+@keyframes backgroundNoise {
+  0% {
+    transform: translate3d(0, 9rem, 0);
+  }
+
+  10% {
+    transform: translate3d(-1rem, -4rem, 0);
+  }
+
+  20% {
+    transform: translate3d(-8rem, 2rem, 0);
+  }
+
+  30% {
+    transform: translate3d(9rem, -9rem, 0);
+  }
+
+  40% {
+    transform: translate3d(-2rem, 7rem, 0);
+  }
+
+  50% {
+    transform: translate3d(-9rem, -4rem, 0);
+  }
+
+  60% {
+    transform: translate3d(2rem, 6rem, 0);
+  }
+
+  70% {
+    transform: translate3d(7rem, -8rem, 0);
+  }
+
+  80% {
+    transform: translate3d(-9rem, 1rem, 0);
+  }
+
+  90% {
+    transform: translate3d(6rem, -5rem, 0);
+  }
+
+  to {
+    transform: translate3d(-7rem, 0, 0);
+  }
 }

@@ -4,18 +4,21 @@
 <head>
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="style.css">
   <title>Óscar A. Montiel</title>
 </head>
 
 <body>
+  <div id="backgroundNoise"></div>
   <div id="fixed-frame">
     <h1 id="title">Óscar A. Montiel</h1>
-    <h2>Listening now to <span id="track"></span> by <span id="artist"></span></h2>
+    <h2 id="nowPlaying">Listening now to <span id="musicData"><span id="track"></span> by <span id="artist"></span></span></h2>
   </div>
-  <script type="module" src="./libraries/threejs/three.module.js"> </script>
-  <script src="./animanoir.js"></script>
+  <canvas id="three"></canvas>
+  <script type="module" src="./animanoir.js"></script>
+
 </body>
 
 </html>
