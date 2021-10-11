@@ -41,6 +41,7 @@ body {
 
 #nowPlaying{
   font-family: 'Roboto Condensed', sans-serif;
+  font-size: 1.1rem;
   margin: 0;
   color: rgba(255, 255, 255, 0.31);
 }
@@ -49,6 +50,83 @@ body {
   font-family: serif;
   color: white;
 }
+
+/* ----------------------------- Visual effects ----------------------------- */
+
+.fade-in {
+  animation: fadeIn ease 1.5s;
+  -webkit-animation: fadeIn ease 1.5s;
+  -moz-animation: fadeIn ease 1.5s;
+  -o-animation: fadeIn ease 1.5s;
+  -ms-animation: fadeIn ease 1.5s;
+}
+.fade-in-quick {
+  animation: fadeIn ease-in 2s;
+  -webkit-animation: fadeIn ease-in 2s;
+  -moz-animation: fadeIn ease-in 2s;
+  -o-animation: fadeIn ease-in 2s;
+  -ms-animation: fadeIn ease-in 2s;
+}
+
+.fade-in-slow {
+  animation: fadeIn ease 3s;
+  -webkit-animation: fadeIn ease 3s;
+  -moz-animation: fadeIn ease 3s;
+  -o-animation: fadeIn ease 3s;
+  -ms-animation: fadeIn ease 3s;
+}
+
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+
+  100% {
+    opacity: 1;
+  }
+}
+
+@-moz-keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+
+  100% {
+    opacity: 1;
+  }
+}
+
+@-webkit-keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+
+  100% {
+    opacity: 1;
+  }
+}
+
+@-o-keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+
+  100% {
+    opacity: 1;
+  }
+}
+
+@-ms-keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+
+  100% {
+    opacity: 1;
+  }
+}
+
+
 
 #backgroundNoise {
   top: -10rem;

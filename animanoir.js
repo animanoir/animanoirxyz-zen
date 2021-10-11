@@ -12,15 +12,20 @@ const lastfmData = fetch('https://ws.audioscrobbler.com/2.0/?method=user.getRece
   });
 
 /* -------------------------------- three.js -------------------------------- */
-/* -------------------------------- three.js -------------------------------- */
 import * as THREE from './libraries/threejs/three.module.js';
-const scene = new THREE.Scene();
-const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
 
 const windowSize = {
   width: window.innerWidth,
   height: window.innerHeight
 }
+
+const scene = new THREE.Scene();
+const camera = new THREE.PerspectiveCamera(75, windowSize.width / windowSize.height, 0.1, 1000);
+
+const spotLight = new THREE.SpotLight(0x78ff00, 0.5, 10, Math.PI * 0.1, 0.25, 1)
+spotLight.position.set(0, 2, 3)
+scene.add(spotLight)
+
 
 // Canvas
 const canvas = document.querySelector('canvas#three')
@@ -28,7 +33,8 @@ const canvas = document.querySelector('canvas#three')
 
 // Renderer
 const renderer = new THREE.WebGLRenderer({
-  canvas: canvas
+  canvas: canvas,
+  antialias: true
 })
 renderer.setSize(windowSize.width, windowSize.height)
 
@@ -36,7 +42,7 @@ renderer.setSize(window.innerWidth, window.innerHeight);
 document.body.appendChild(renderer.domElement);
 
 const geometry = new THREE.BoxGeometry();
-const material = new THREE.MeshBasicMaterial({
+const material = new THREE.MeshPhongMaterial({
   color: 0x00ff00
 });
 const cube = new THREE.Mesh(geometry, material);

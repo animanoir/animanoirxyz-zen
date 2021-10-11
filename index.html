@@ -7,14 +7,15 @@
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="style.css">
-  <title>Óscar A. Montiel</title>
+  <link href="./assets/favicon-32x32.png" rel="icon" />
+  <title>Óscar A. Montiel | ​Art·〇·Software</title>
 </head>
 
 <body>
   <div id="backgroundNoise"></div>
-  <div id="fixed-frame">
+  <div id="fixed-frame" class="fade-in-quick">
     <h1 id="title">Óscar A. Montiel</h1>
-    <h2 id="nowPlaying">Listening now to <span id="musicData"><span id="track"></span> by <span id="artist"></span></span></h2>
+    <h2 id="nowPlaying" class="fade-in">Listening now to <span class="musicData"> <span id="track">...</span></span> by <span class="musicData"><span id="artist">...</span></span> <img src="./assets/soundbars.gif" alt="Now playing..." /></h2>
   </div>
   <canvas id="three"></canvas>
   <script type="module" src="./animanoir.js"></script>
