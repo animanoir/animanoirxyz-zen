@@ -1,0 +1,9 @@
+@import "normalize.css";
+
+* {
+  color: white;
+}
+
+body {
+  background-color: black;
+}
