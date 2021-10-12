@@ -17,17 +17,17 @@ import {
 
 /* ------------------------------ Last.FM Data ------------------------------ */
 
-// const lastfmData = fetch('https://ws.audioscrobbler.com/2.0/?method=user.getRecentTracks&user=swoephowx&api_key=8d1394415d95c0771ac9f8247cc7ee17&limit=1&nowplaying=true&format=json')
-//   .then(
-//     response => response.json()
-//   )
-//   .then(data => {
-//     // Removes quotes from JSON data
-//     const formattedTrackname = JSON.stringify(data.recenttracks.track[0].name).replace(/["]+/g, '')
-//     const formattedArtistname = JSON.stringify(data.recenttracks.track[0].artist['#text']).replace(/["]+/g, '')
-//     document.getElementById("track").textContent = formattedTrackname
-//     document.getElementById("artist").textContent = formattedArtistname
-//   });
+const lastfmData = fetch('https://ws.audioscrobbler.com/2.0/?method=user.getRecentTracks&user=swoephowx&api_key=8d1394415d95c0771ac9f8247cc7ee17&limit=1&nowplaying=true&format=json')
+  .then(
+    response => response.json()
+  )
+  .then(data => {
+    // Removes quotes from JSON data
+    const formattedTrackname = JSON.stringify(data.recenttracks.track[0].name).replace(/["]+/g, '')
+    const formattedArtistname = JSON.stringify(data.recenttracks.track[0].artist['#text']).replace(/["]+/g, '')
+    document.getElementById("track").textContent = formattedTrackname
+    document.getElementById("artist").textContent = formattedArtistname
+  });
 
 /* -------------------------------- three.js -------------------------------- */
 
@@ -87,10 +87,8 @@ const renderer = new THREE.WebGLRenderer({
 renderer.setPixelRatio(window.devicePixelRatio);
 renderer.setSize(windowSize.width, windowSize.height)
 renderer.setSize(window.innerWidth, window.innerHeight);
-
+renderer.shadowMap.enabled = true
 const scene = new THREE.Scene();
-
-let r
 
 // Camera
 const camera = new THREE.PerspectiveCamera(75, windowSize.width / windowSize.height, 0.1, 1000);
@@ -111,16 +109,17 @@ const texture = new THREE.VideoTexture(video);
 
 // Light
 let directionalLight = new THREE.DirectionalLight('white', 0.7)
+directionalLight.castShadow = true
 scene.add(directionalLight)
 
 // Geometries
 const geometry = new THREE.BoxGeometry(7, 7, 7);
-const material = new THREE.MeshBasicMaterial({
+const material = new THREE.MeshPhongMaterial({
   color: 'white',
   map: texture
 });
 for (let i = 0; i < 100; i++) {
-  const cube = new THREE.Mesh(geometry, material);
+  var cube = new THREE.Mesh(geometry, material);
   cube.position.x = (Math.random() - 0.5) * 100
   cube.position.y = (Math.random() - 0.5) * 100
   cube.position.z = (Math.random() - 0.5) * 100
@@ -137,8 +136,9 @@ for (let i = 0; i < 100; i++) {
 // Animation function
 const animate = function () {
   requestAnimationFrame(animate);
+  const elapsedTime = clock.getElapsedTime()
 
-  // controls.update( clock.getDelta() );
+  cube.rotation.x = elapsedTime
   controls.update();
 
 

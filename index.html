@@ -14,14 +14,14 @@
 <body>
   <div id="backgroundNoise"></div>
   <div id="fixed-frame" class="fade-in">
-    <h1 id="title">Óscar A. Montiel</h1>
+    <h1 id="title">Óscar A. Montiel (site under construction)</h1>
     <h2 id="nowPlaying">Listening now to <span class="musicData"> <span id="track">🎲</span></span> by <span
         class="musicData"><span id="artist">🥁</span></span> <img src="./assets/soundbars.gif" alt="Now playing..." />
     </h2>
   </div>
   <main>
     <div class="hero">
-      <video id="video" loop crossorigin="anonymous" playsinline style="display:none">
+      <video autoplay id="video" muted loop crossorigin="anonymous" playsinline style="display:none">
         <source src="./assets/megifbw.mp4" type="video/mp4;" codecs="avc1.42E01E, mp4a.40.2">
 
       </video>
@@ -47,6 +47,7 @@
     </div>
 
   </footer>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.8.0/gsap.min.js"></script>
   <script type="module" src="./animanoir.js"></script>
 
 </body>
