@@ -32,7 +32,7 @@ import {
 /* -------------------------------- three.js -------------------------------- */
 
 const clock = new THREE.Clock()
-
+let text
 /**
  * Fonts
  */
@@ -99,7 +99,15 @@ camera.position.z = 10;
 const controls = new OrbitControls(camera, renderer.domElement);
 controls.update();
 
+const video = document.getElementById('video');
+video.play();
+video.addEventListener('play', function () {
 
+  this.currentTime = 3;
+
+});
+
+const texture = new THREE.VideoTexture(video);
 
 // Light
 let directionalLight = new THREE.DirectionalLight('white', 0.7)
@@ -107,20 +115,28 @@ scene.add(directionalLight)
 
 // Geometries
 const geometry = new THREE.BoxGeometry(7, 7, 7);
-const material = new THREE.MeshPhongMaterial({
-  color: 'red',
+const material = new THREE.MeshBasicMaterial({
+  color: 'white',
+  map: texture
 });
-const cube = new THREE.Mesh(geometry, material);
-// scene.add(cube);
+for (let i = 0; i < 100; i++) {
+  const cube = new THREE.Mesh(geometry, material);
+  cube.position.x = (Math.random() - 0.5) * 100
+  cube.position.y = (Math.random() - 0.5) * 100
+  cube.position.z = (Math.random() - 0.5) * 100
+  cube.rotation.x = Math.random() * Math.PI
+  cube.rotation.y = Math.random() * Math.PI
+  // const scale = Math.random()
+  // cube.scale.set(scale, scale, scale)
+  scene.add(cube);
+
+}
 
 
 
 // Animation function
 const animate = function () {
   requestAnimationFrame(animate);
-
-  cube.rotation.x += 0.01;
-  cube.rotation.y += 0.01;
 
   // controls.update( clock.getDelta() );
   controls.update();
