@@ -8,7 +8,7 @@
 html,
 body
 {
-    overflow: hidden;
+    overflow-x: hidden;
 }
 
 canvas{
@@ -17,6 +17,22 @@ canvas{
 }
 body {
   background-color: black;
+}
+
+footer {
+  display: flex;
+  position: fixed;
+  bottom: 0;
+  right: 0;
+  padding: 1rem;
+  justify-content: end;
+  width: 100vw
+}
+
+#links {
+  width: 10%;
+  display: flex;
+  justify-content: space-between;
 }
 
 #fixed-frame{
@@ -32,6 +48,10 @@ body {
     left: 0;
     outline: none;
     overflow: hidden;
+}
+
+.hero {
+  display: block;
 }
 
 #title{
