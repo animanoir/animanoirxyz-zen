@@ -19,17 +19,17 @@ import {
 
 //TODO Turn on Last.fm fetching before pushing
 
-const lastfmData = fetch('https://ws.audioscrobbler.com/2.0/?method=user.getRecentTracks&user=swoephowx&api_key=8d1394415d95c0771ac9f8247cc7ee17&limit=1&nowplaying=true&format=json')
-  .then(
-    response => response.json()
-  )
-  .then(data => {
-    // Removes quotes from JSON data
-    const formattedTrackname = JSON.stringify(data.recenttracks.track[0].name).replace(/["]+/g, '')
-    const formattedArtistname = JSON.stringify(data.recenttracks.track[0].artist['#text']).replace(/["]+/g, '')
-    document.getElementById("track").textContent = formattedTrackname
-    document.getElementById("artist").textContent = formattedArtistname
-  });
+// const lastfmData = fetch('https://ws.audioscrobbler.com/2.0/?method=user.getRecentTracks&user=swoephowx&api_key=8d1394415d95c0771ac9f8247cc7ee17&limit=1&nowplaying=true&format=json')
+//   .then(
+//     response => response.json()
+//   )
+//   .then(data => {
+//     // Removes quotes from JSON data
+//     const formattedTrackname = JSON.stringify(data.recenttracks.track[0].name).replace(/["]+/g, '')
+//     const formattedArtistname = JSON.stringify(data.recenttracks.track[0].artist['#text']).replace(/["]+/g, '')
+//     document.getElementById("track").textContent = formattedTrackname
+//     document.getElementById("artist").textContent = formattedArtistname
+//   });
 
 /* -------------------------------- three.js -------------------------------- */
 
@@ -44,7 +44,7 @@ const matcapTexture = new THREE.TextureLoader().load('./assets/matcaps/161B1F_C7
 fontLoader.load(
   './assets/fonts/notosansregular.json',
   (font) => {
-    console.log('loaded')
+    console.log('font loaded')
   }
 )
 
@@ -73,6 +73,15 @@ fontLoader.load(
   }
 )
 
+
+function onPointerMove( event ) {
+
+  pointer.x = ( event.clientX / window.innerWidth ) * 2 - 1;
+  pointer.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
+
+}
+
+
 // Canvas
 const canvas = document.querySelector('canvas#three')
 
@@ -100,27 +109,44 @@ const controls = new OrbitControls(camera, renderer.domElement);
 controls.update();
 
 const video = document.getElementById('video');
+const vidRed = document.getElementById('vid-red');
+
+
 video.play();
+vidRed.play();
+
+
 video.addEventListener('play', function () {
 
   this.currentTime = 3;
 
 });
+vidRed.addEventListener('play', function () {
+
+  this.currentTime = 3;
+
+});
+
 
 const texture = new THREE.VideoTexture(video);
+const textureRed = new THREE.VideoTexture(vidRed);
+
+
+const textures = [texture, textureRed]
 
 // Light
-let directionalLight = new THREE.DirectionalLight('white', 0.7)
+let directionalLight = new THREE.DirectionalLight('white', 0.9)
 directionalLight.castShadow = true
 scene.add(directionalLight)
 
 // Geometries
 const geometry = new THREE.BoxGeometry(7, 7, 7);
-const material = new THREE.MeshPhongMaterial({
-  color: 'white',
-  map: texture
-});
 for (let i = 0; i < 100; i++) {
+  let randomIndex = Math.floor(Math.random() * textures.length)
+  const material = new THREE.MeshPhongMaterial({
+    color: 'white',
+    map: textures[randomIndex]
+  });
   var cube = new THREE.Mesh(geometry, material);
   cube.position.x = (Math.random() - 0.5) * 100
   cube.position.y = (Math.random() - 0.5) * 100
@@ -133,7 +159,9 @@ for (let i = 0; i < 100; i++) {
 
 }
 
-
+function render(){
+  renderer.render( scene, camera );
+}
 
 // Animation function
 const animate = function () {
@@ -143,8 +171,7 @@ const animate = function () {
   cube.rotation.x = elapsedTime
   controls.update();
 
-
-  renderer.render(scene, camera);
+  render()
 };
 
 animate();

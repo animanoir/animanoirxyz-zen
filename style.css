@@ -29,6 +29,13 @@ footer {
   width: 100vw
 }
 
+a:hover {
+  color: red;
+}
+svg:hover {
+  fill: red;
+}
+
 #links {
   width: 10%;
   display: flex;
