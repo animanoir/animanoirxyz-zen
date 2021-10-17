@@ -55,18 +55,27 @@ setTimeout(() => {
 
 const clock = new THREE.Clock()
 let text
+const loadingBarElement = document.querySelector('.loading-bar')
 
 // Loading Manager
 const loadingManager = new THREE.LoadingManager(
+  // Loaded
   () => {
-    console.log('loaded.')
-    gsap.to(overlayMaterial.uniforms.uAlpha, {
-      duration: 3,
-      value: 0
-    })
+    console.log('LOADING MANAGER: assets loaded.')
+    window.setTimeout(() =>
+    {
+        gsap.to(overlayMaterial.uniforms.uAlpha, { duration: 3, value: 0})
+
+        loadingBarElement.classList.add('ended')
+        loadingBarElement.style.transform = ''
+    }, 500)
   },
-  () => {
-    console.log('loading...')
+  // Loading
+  (itemUrl, itemsLoaded, itemsTotal) => {
+    const progressRatio = (itemsLoaded / itemsTotal)
+    console.log(progressRatio)
+    loadingBarElement.style.transform = `scaleX(${progressRatio * .0})`
+    console.log('LOADING MANAGER: assets loading...')
   }
 )
 
@@ -77,10 +86,7 @@ const fontLoader = new FontLoader(loadingManager)
 const matcapTexture = new THREE.TextureLoader().load('./assets/matcaps/161B1F_C7E0EC_90A5B3_7B8C9B-256px.png')
 
 fontLoader.load(
-  './assets/fonts/notosansregular.json',
-  (font) => {
-    console.log('font loaded.')
-  }
+  './assets/fonts/notosansregular.json'
 )
 
 fontLoader.load(
