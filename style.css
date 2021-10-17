@@ -214,3 +214,11 @@ svg:hover {
     transform: translate3d(-7rem, 0, 0);
   }
 }
+
+/* ----------------------------- Responsiveness ----------------------------- */
+@media (max-width: 1000px) {
+  #links {
+    width: 100%;
+    justify-content: space-around;
+  }
+}
