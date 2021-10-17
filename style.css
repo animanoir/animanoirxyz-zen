@@ -19,27 +19,8 @@ body {
   background-color: black;
 }
 
-footer {
-  display: flex;
-  position: fixed;
-  bottom: 0;
-  right: 0;
-  padding: 1rem;
-  justify-content: end;
-  width: 100vw
-}
-
 a:hover {
   color: red;
-}
-svg:hover {
-  fill: red;
-}
-
-#links {
-  width: 10%;
-  display: flex;
-  justify-content: space-between;
 }
 
 #fixed-frame{
@@ -76,6 +57,29 @@ svg:hover {
 #musicData {
   font-family: serif;
   color: white;
+}
+
+/* Footer */
+
+footer {
+  display: flex;
+  position: fixed;
+  bottom: 0;
+  right: 0;
+  padding: 1rem;
+  justify-content: end;
+  width: 100vw
+}
+
+#links {
+  width: 10%;
+  display: flex;
+  justify-content: space-between;
+}
+
+.linkImg {
+  bottom: -100px;
+  visibility: hidden;
 }
 
 /* ----------------------------- Visual effects ----------------------------- */

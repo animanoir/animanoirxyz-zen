@@ -31,20 +31,55 @@ const lastfmData = fetch('https://ws.audioscrobbler.com/2.0/?method=user.getRece
     document.getElementById("artist").textContent = formattedArtistname
   });
 
+
+/* ---------------------------------- gsap ---------------------------------- */
+
+// Animates social links to the top after 500ms
+setTimeout(() => {
+  for (let i = 1; i <= 4; i++) {
+    let link = '.link-' + i
+    let speed = 100
+    TweenLite.set(link, {
+      visibility: "visible"
+    });
+    gsap.from(link, {
+      duration: 1 * i * .5,
+      y: 100,
+      opacity: 0
+    });
+  }
+}, 500)
+
+
 /* -------------------------------- three.js -------------------------------- */
 
 const clock = new THREE.Clock()
 let text
+
+// Loading Manager
+const loadingManager = new THREE.LoadingManager(
+  () => {
+    console.log('loaded.')
+    gsap.to(overlayMaterial.uniforms.uAlpha, {
+      duration: 3,
+      value: 0
+    })
+  },
+  () => {
+    console.log('loading...')
+  }
+)
+
 /**
  * Fonts
  */
-const fontLoader = new FontLoader()
+const fontLoader = new FontLoader(loadingManager)
 const matcapTexture = new THREE.TextureLoader().load('./assets/matcaps/161B1F_C7E0EC_90A5B3_7B8C9B-256px.png')
 
 fontLoader.load(
   './assets/fonts/notosansregular.json',
   (font) => {
-    console.log('font loaded')
+    console.log('font loaded.')
   }
 )
 
@@ -73,14 +108,12 @@ fontLoader.load(
   }
 )
 
+function onPointerMove(event) {
 
-function onPointerMove( event ) {
-
-  pointer.x = ( event.clientX / window.innerWidth ) * 2 - 1;
-  pointer.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
+  pointer.x = (event.clientX / window.innerWidth) * 2 - 1;
+  pointer.y = -(event.clientY / window.innerHeight) * 2 + 1;
 
 }
-
 
 // Canvas
 const canvas = document.querySelector('canvas#three')
@@ -109,13 +142,38 @@ camera.position.z = 10;
 const controls = new OrbitControls(camera, renderer.domElement);
 controls.update();
 
+// Shader loader
+const overlayGeometry = new THREE.PlaneGeometry(2, 2, 1, 1)
+const overlayMaterial = new THREE.ShaderMaterial({
+  transparent: true,
+  vertexShader: `
+      void main()
+      {
+          gl_Position = vec4(position, 1.0);
+      }
+  `,
+  uniforms: {
+    uAlpha: {
+      value: 1
+    }
+  },
+  fragmentShader: `
+      uniform float uAlpha;
+      void main()
+      {
+          gl_FragColor = vec4(0.0, 0.0, 0.0, uAlpha);
+      }
+  `
+})
+const overlay = new THREE.Mesh(overlayGeometry, overlayMaterial)
+scene.add(overlay)
+
+// Video textures
 const video = document.getElementById('video');
 const vidRed = document.getElementById('vid-red');
 
-
 video.play();
 vidRed.play();
-
 
 video.addEventListener('play', function () {
 
@@ -127,7 +185,6 @@ vidRed.addEventListener('play', function () {
   this.currentTime = 3;
 
 });
-
 
 const texture = new THREE.VideoTexture(video);
 const textureRed = new THREE.VideoTexture(vidRed);
@@ -160,8 +217,8 @@ for (let i = 0; i < 100; i++) {
 
 }
 
-function render(){
-  renderer.render( scene, camera );
+function render() {
+  renderer.render(scene, camera);
 }
 
 // Animation function
