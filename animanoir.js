@@ -19,25 +19,27 @@ import {
 
 //TODO Turn on Last.fm fetching before pushing
 
-const lastfmData = fetch('https://ws.audioscrobbler.com/2.0/?method=user.getRecentTracks&user=swoephowx&api_key=8d1394415d95c0771ac9f8247cc7ee17&limit=1&nowplaying=true&format=json')
-  .then(
-    response => response.json()
-  )
-  .then(data => {
-    // Removes quotes from JSON data
-    const formattedTrackname = JSON.stringify(data.recenttracks.track[0].name).replace(/["]+/g, '')
-    const formattedArtistname = JSON.stringify(data.recenttracks.track[0].artist['#text']).replace(/["]+/g, '')
-    document.getElementById("track").textContent = formattedTrackname
-    document.getElementById("artist").textContent = formattedArtistname
-  });
+// const lastfmData = fetch('https://ws.audioscrobbler.com/2.0/?method=user.getRecentTracks&user=swoephowx&api_key=8d1394415d95c0771ac9f8247cc7ee17&limit=1&nowplaying=true&format=json')
+//   .then(
+//     response => response.json()
+//   )
+//   .then(data => {
+//     // Removes quotes from JSON data
+//     const formattedTrackname = JSON.stringify(data.recenttracks.track[0].name).replace(/["]+/g, '')
+//     const formattedArtistname = JSON.stringify(data.recenttracks.track[0].artist['#text']).replace(/["]+/g, '')
+//     document.getElementById("track").textContent = formattedTrackname
+//     document.getElementById("artist").textContent = formattedArtistname
+//   });
 
 
 /* ---------------------------------- gsap ---------------------------------- */
 
 // Animates social links to the top after 500ms
+
 setTimeout(() => {
   for (let i = 1; i <= 4; i++) {
     let link = '.link-' + i
+    let linkDom = document.querySelector(`.link-${i}`)
     let speed = 100
     TweenLite.set(link, {
       visibility: "visible"
@@ -47,8 +49,35 @@ setTimeout(() => {
       y: 100,
       opacity: 0
     });
+    linkDom.addEventListener("mouseout", () => {
+      linkName.textContent = ''
+    })
   }
 }, 500)
+
+
+let linkName = document.querySelector('#linkName')
+
+const linkOne = document.querySelector('.link-1')
+linkOne.addEventListener('mouseover', () => {
+  linkName.textContent = 'Twitter'
+})
+
+const linkTwo = document.querySelector('.link-2')
+linkTwo.addEventListener('mouseover', () => {
+  linkName.textContent = 'LinkedIn'
+
+
+})
+const linkThree = document.querySelector('.link-3')
+linkThree.addEventListener('mouseover', () => {
+  linkName.textContent = 'Blog (en español)'
+
+})
+const linkFour = document.querySelector('.link-4')
+linkFour.addEventListener('mouseover', () => {
+  linkName.textContent = 'More links...'
+})
 
 
 /* -------------------------------- three.js -------------------------------- */
@@ -58,20 +87,23 @@ const firstWordArray = [
   'Death',
   'Digital',
   'Art',
-  'Creative'
+  'Creative',
+  'Cyber',
+  'Human'
 ]
 
 let useOrbitControls = false
 
 
 const firstWord = firstWordArray[Math.floor(Math.random() * firstWordArray.length)]
-console.log(firstWord)
 
 const secondWordArray = [
   'Life',
   'Analog',
   'Software',
-  'Developer'
+  'Developer',
+  'Punk',
+  'Love'
 
 ]
 
@@ -233,6 +265,25 @@ const textureRed = new THREE.VideoTexture(vidRed);
 
 const textures = [texture, textureRed]
 
+// Video cubes
+const geometry = new THREE.BoxGeometry(7, 7, 7);
+for (let i = 0; i < 100; i++) {
+  let randomIndex = Math.floor(Math.random() * textures.length)
+  const material = new THREE.MeshPhongMaterial({
+    color: 'white',
+    map: textures[randomIndex]
+  });
+  var cube = new THREE.Mesh(geometry, material);
+  cube.position.x = ((Math.random() - 0.5) * 111) + 10
+  cube.position.y = ((Math.random() - 0.5) * 111)+ 10
+  cube.position.z = (-1 * (Math.random() - 0.5) * 100) - 5
+  cube.rotation.x = Math.random() * Math.PI
+  cube.rotation.y = Math.random() * Math.PI
+  // const scale = Math.random()
+  // cube.scale.set(scale, scale, scale)
+  scene.add(cube);
+}
+
 // Lighting
 // let directionalLight = new THREE.AmbientLight('white', 0.5)
 // directionalLight.castShadow = true
@@ -243,25 +294,6 @@ pointLight.position.x = 2
 pointLight.position.y = 3
 pointLight.position.z = 4
 scene.add(pointLight)
-
-// Video cubes
-const geometry = new THREE.BoxGeometry(7, 7, 7);
-for (let i = 0; i < 100; i++) {
-  let randomIndex = Math.floor(Math.random() * textures.length)
-  const material = new THREE.MeshPhongMaterial({
-    color: 'white',
-    map: textures[randomIndex]
-  });
-  var cube = new THREE.Mesh(geometry, material);
-  cube.position.x = (Math.random() - 0.5) * 100
-  cube.position.y = (Math.random() - 0.5) * 100
-  cube.position.z = -1 * (Math.random() - 0.5) * 100
-  cube.rotation.x = Math.random() * Math.PI
-  cube.rotation.y = Math.random() * Math.PI
-  // const scale = Math.random()
-  // cube.scale.set(scale, scale, scale)
-  scene.add(cube);
-}
 
 // Glowing spheres
 // const sphereOneGeometry = new THREE.SphereGeometry(1, 32, 32)

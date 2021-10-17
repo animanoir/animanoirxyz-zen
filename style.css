@@ -87,6 +87,12 @@ footer {
   width: 100vw
 }
 
+#linkName {
+  font-family: 'Josefin Sans', sans-serif;
+  font-size: 1rem;
+  margin-right: 1rem;
+}
+
 #links {
   width: 15%;
   display: flex;
