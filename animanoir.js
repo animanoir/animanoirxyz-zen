@@ -266,8 +266,10 @@ const textureRed = new THREE.VideoTexture(vidRed);
 const textures = [texture, textureRed]
 
 // Video cubes
+const videoCubesGroup = new THREE.Group()
+const cubesQuantity = 120
 const geometry = new THREE.BoxGeometry(7, 7, 7);
-for (let i = 0; i < 100; i++) {
+for (let i = 0; i < cubesQuantity; i++) {
   let randomIndex = Math.floor(Math.random() * textures.length)
   const material = new THREE.MeshPhongMaterial({
     color: 'white',
@@ -276,20 +278,23 @@ for (let i = 0; i < 100; i++) {
   var cube = new THREE.Mesh(geometry, material);
   cube.position.x = ((Math.random() - 0.5) * 111) + 10
   cube.position.y = ((Math.random() - 0.5) * 111)+ 10
-  cube.position.z = (-1 * (Math.random() - 0.5) * 100) - 5
+  cube.position.z = (-1 * (Math.random() - 0.5) * 100) - 10
   cube.rotation.x = Math.random() * Math.PI
   cube.rotation.y = Math.random() * Math.PI
-  // const scale = Math.random()
-  // cube.scale.set(scale, scale, scale)
-  scene.add(cube);
+  const scale = Math.random() * 1.5
+  cube.scale.set(scale, scale, scale)
+  // scene.add(cube);
+  videoCubesGroup.add(cube)
 }
+
+scene.add(videoCubesGroup)
 
 // Lighting
 // let directionalLight = new THREE.AmbientLight('white', 0.5)
 // directionalLight.castShadow = true
 // scene.add(directionalLight)
 
-const pointLight = new THREE.PointLight(0xffffff, 0.5)
+const pointLight = new THREE.DirectionalLight(0xffffff, 1)
 pointLight.position.x = 2
 pointLight.position.y = 3
 pointLight.position.z = 4
@@ -320,8 +325,9 @@ function render() {
 // Animation function
 const animate = function () {
   requestAnimationFrame(animate);
-  // const elapsedTime = clock.getElapsedTime()
+  const elapsedTime = clock.getElapsedTime()
 
+  videoCubesGroup.rotation.y = elapsedTime * -0.01
 
   // controls.update();
 

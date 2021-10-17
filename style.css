@@ -94,7 +94,7 @@ footer {
 }
 
 #links {
-  width: 15%;
+  width: 10%;
   display: flex;
   justify-content: space-between;
 }
@@ -247,5 +247,8 @@ footer {
   #links {
     width: 100%;
     justify-content: space-around;
+  }
+  #linkName {
+    display: none;
   }
 }
