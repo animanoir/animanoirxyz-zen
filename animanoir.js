@@ -53,8 +53,35 @@ setTimeout(() => {
 
 /* -------------------------------- three.js -------------------------------- */
 
+
+const firstWordArray = [
+  'Death',
+  'Digital',
+  'Art',
+  'Creative'
+]
+
+let useOrbitControls = false
+
+
+const firstWord = firstWordArray[Math.floor(Math.random() * firstWordArray.length)]
+console.log(firstWord)
+
+const secondWordArray = [
+  'Life',
+  'Analog',
+  'Software',
+  'Developer'
+
+]
+
+const secondWord = secondWordArray[Math.floor(Math.random() * secondWordArray.length)]
+
 const clock = new THREE.Clock()
-let text
+const cursor = {
+  x: 0,
+  y: 0
+}
 const loadingBarElement = document.querySelector('.loading-bar')
 
 // Loading Manager
@@ -62,18 +89,19 @@ const loadingManager = new THREE.LoadingManager(
   // Loaded
   () => {
     console.log('LOADING MANAGER: assets loaded.')
-    window.setTimeout(() =>
-    {
-        gsap.to(overlayMaterial.uniforms.uAlpha, { duration: 3, value: 0})
+    window.setTimeout(() => {
+      gsap.to(overlayMaterial.uniforms.uAlpha, {
+        duration: 3,
+        value: 0
+      })
 
-        loadingBarElement.classList.add('ended')
-        loadingBarElement.style.transform = ''
+      loadingBarElement.classList.add('ended')
+      loadingBarElement.style.transform = ''
     }, 500)
   },
   // Loading
   (itemUrl, itemsLoaded, itemsTotal) => {
     const progressRatio = (itemsLoaded / itemsTotal)
-    console.log(progressRatio)
     loadingBarElement.style.transform = `scaleX(${progressRatio * .0})`
     console.log('LOADING MANAGER: assets loading...')
   }
@@ -93,7 +121,7 @@ fontLoader.load(
   './assets/fonts/notosansregular.json',
   (font) => {
     const textGeometry = new TextGeometry(
-      'Art · Software', {
+      `${firstWord} · ${secondWord}`, {
         font: font,
         size: 1,
         height: 0.2,
@@ -109,7 +137,7 @@ fontLoader.load(
     const textMaterial = new THREE.MeshMatcapMaterial({
       matcap: matcapTexture
     })
-    const text = new THREE.Mesh(textGeometry, textMaterial)
+    var text = new THREE.Mesh(textGeometry, textMaterial)
     scene.add(text)
   }
 )
@@ -129,6 +157,9 @@ const windowSize = {
   height: window.innerHeight
 }
 
+const scene = new THREE.Scene();
+
+
 // Renderer
 const renderer = new THREE.WebGLRenderer({
   canvas: canvas,
@@ -139,14 +170,18 @@ renderer.setPixelRatio(window.devicePixelRatio);
 renderer.setSize(windowSize.width, windowSize.height)
 renderer.setSize(window.innerWidth, window.innerHeight);
 renderer.shadowMap.enabled = true
-const scene = new THREE.Scene();
+
+// Axes helper
+// const axesHelper = new THREE.AxesHelper(5);
+// scene.add(axesHelper);
 
 // Camera
 const camera = new THREE.PerspectiveCamera(75, windowSize.width / windowSize.height, 0.1, 1000);
-camera.position.z = 5;
+camera.position.z = 6;
 
-const controls = new OrbitControls(camera, renderer.domElement);
-controls.update();
+//Orbit controls
+// const controls = new OrbitControls(camera, renderer.domElement);
+// controls.update();
 
 // Shader loader
 const overlayGeometry = new THREE.PlaneGeometry(2, 2, 1, 1)
@@ -198,12 +233,18 @@ const textureRed = new THREE.VideoTexture(vidRed);
 
 const textures = [texture, textureRed]
 
-// Light
-let directionalLight = new THREE.DirectionalLight('white', 0.9)
-directionalLight.castShadow = true
-scene.add(directionalLight)
+// Lighting
+// let directionalLight = new THREE.AmbientLight('white', 0.5)
+// directionalLight.castShadow = true
+// scene.add(directionalLight)
 
-// Geometries
+const pointLight = new THREE.PointLight(0xffffff, 0.5)
+pointLight.position.x = 2
+pointLight.position.y = 3
+pointLight.position.z = 4
+scene.add(pointLight)
+
+// Video cubes
 const geometry = new THREE.BoxGeometry(7, 7, 7);
 for (let i = 0; i < 100; i++) {
   let randomIndex = Math.floor(Math.random() * textures.length)
@@ -214,14 +255,31 @@ for (let i = 0; i < 100; i++) {
   var cube = new THREE.Mesh(geometry, material);
   cube.position.x = (Math.random() - 0.5) * 100
   cube.position.y = (Math.random() - 0.5) * 100
-  cube.position.z = (Math.random() - 0.5) * 100
+  cube.position.z = -1 * (Math.random() - 0.5) * 100
   cube.rotation.x = Math.random() * Math.PI
   cube.rotation.y = Math.random() * Math.PI
   // const scale = Math.random()
   // cube.scale.set(scale, scale, scale)
   scene.add(cube);
-
 }
+
+// Glowing spheres
+// const sphereOneGeometry = new THREE.SphereGeometry(1, 32, 32)
+// const sphereOneMaterial = new THREE.MeshStandardMaterial({
+//   color: 0xffff00
+// })
+// const sphereOne = new THREE.Mesh(sphereOneGeometry, sphereOneMaterial)
+// sphereOne.position.set(-4.516, 2.961, 0.114)
+// scene.add(sphereOne)
+
+// const sphereTwoGeometry = new THREE.SphereGeometry(1, 32, 32)
+// const sphereTwoMaterial = new THREE.MeshStandardMaterial({
+//   color: 0xffff00
+// })
+// const sphereTwo = new THREE.Mesh(sphereTwoGeometry, sphereTwoMaterial)
+// sphereTwo.position.set(4.446, 3.215, 0)
+// sphereTwo.scale.set(2, 2, 2)
+// scene.add(sphereTwo)
 
 function render() {
   renderer.render(scene, camera);
@@ -230,15 +288,24 @@ function render() {
 // Animation function
 const animate = function () {
   requestAnimationFrame(animate);
-  const elapsedTime = clock.getElapsedTime()
+  // const elapsedTime = clock.getElapsedTime()
 
-  cube.rotation.x = elapsedTime
-  controls.update();
+
+  // controls.update();
+
+  // Smooth camera angle movement
+  camera.position.x = cursor.x
+  // camera.position.z = (Math.cos(cursor.x * Math.PI) * 10)
+  camera.position.y = cursor.y
+  // camera.lookAt(text.position)
+
 
   render()
 };
 
 animate();
+
+/* --------------------------------- Raw JS --------------------------------- */
 
 // Responsive 3D canvas
 window.addEventListener('resize', () => {
@@ -254,4 +321,17 @@ window.addEventListener('resize', () => {
   renderer.setSize(windowSize.width, windowSize.height)
 })
 
-// Mouse events
+// Detects mouse coordinates
+window.addEventListener('mousemove', (event) => {
+  cursor.x = event.clientX / windowSize.width - 0.5
+  cursor.y = -(event.clientY / windowSize.height - 0.5)
+})
+
+
+// Detects mouse's middle button click
+window.addEventListener('mousedown', (event) => {
+  if (event.button == 1 || event.buttons == 4) {
+    console.log('middle mouse');
+
+  }
+});
