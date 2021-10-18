@@ -285,7 +285,7 @@ for (let i = 0; i < cubesQuantity; i++) {
   });
   var cube = new THREE.Mesh(geometry, material);
   cube.position.x = ((Math.random() - 0.5) * 111) + 10
-  cube.position.y = ((Math.random() - 0.5) * 111)+ 10
+  cube.position.y = ((Math.random() - 0.5) * 111) + 10
   cube.position.z = (-1 * (Math.random() - 0.5) * 100) - 10
   cube.rotation.x = Math.random() * Math.PI
   cube.rotation.y = Math.random() * Math.PI
