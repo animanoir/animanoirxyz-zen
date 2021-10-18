@@ -37,7 +37,7 @@ const lastfmData = fetch('https://ws.audioscrobbler.com/2.0/?method=user.getRece
 // Animates social links to the top after 500ms
 
 setTimeout(() => {
-  for (let i = 1; i <= 4; i++) {
+  for (let i = 1; i <= 5; i++) {
     let link = '.link-' + i
     let linkDom = document.querySelector(`.link-${i}`)
     let speed = 100
@@ -209,7 +209,7 @@ renderer.shadowMap.enabled = true
 
 // Camera
 const camera = new THREE.PerspectiveCamera(75, windowSize.width / windowSize.height, 0.1, 1000);
-camera.position.z = 6;
+camera.position.z = 7;
 
 //Orbit controls
 // const controls = new OrbitControls(camera, renderer.domElement);
