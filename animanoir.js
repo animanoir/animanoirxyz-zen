@@ -84,26 +84,26 @@ linkFour.addEventListener('mouseover', () => {
 
 
 const firstWordArray = [
-  'Death',
   'Digital',
-  'Art',
   'Creative',
   'Cyber',
-  'Human'
+  'Human',
+  'Magic',
+  'Analog',
+  'Software',
+  'Meta'
 ]
-
-let useOrbitControls = false
-
 
 const firstWord = firstWordArray[Math.floor(Math.random() * firstWordArray.length)]
 
 const secondWordArray = [
-  'Life',
-  'Analog',
-  'Software',
   'Developer',
   'Punk',
-  'Love'
+  'Love',
+  'Artist',
+  'Lover',
+  'Crafter',
+  'Philosopher'
 
 ]
 
@@ -244,9 +244,11 @@ scene.add(overlay)
 // Video textures
 const video = document.getElementById('video');
 const vidRed = document.getElementById('vid-red');
+const vidg3 = document.querySelector('#vg3');
 
 video.play();
 vidRed.play();
+vidg3.play();
 
 video.addEventListener('play', function () {
 
@@ -258,16 +260,22 @@ vidRed.addEventListener('play', function () {
   this.currentTime = 3;
 
 });
+vidg3.addEventListener('play', function () {
+
+  this.currentTime = 3;
+
+});
 
 const texture = new THREE.VideoTexture(video);
 const textureRed = new THREE.VideoTexture(vidRed);
+const textureV3 = new THREE.VideoTexture(vidg3);
 
 
-const textures = [texture, textureRed]
+const textures = [texture, textureRed, textureV3]
 
 // Video cubes
 const videoCubesGroup = new THREE.Group()
-const cubesQuantity = 120
+const cubesQuantity = 150
 const geometry = new THREE.BoxGeometry(7, 7, 7);
 for (let i = 0; i < cubesQuantity; i++) {
   let randomIndex = Math.floor(Math.random() * textures.length)
