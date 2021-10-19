@@ -1,18 +1,28 @@
 console.log('animanoir.js loaded.')
 
-import * as THREE from './libraries/threejs/three.module.js';
+import * as THREE from './libraries/three.js-dev/build/three.module.js';
 
 import {
   OrbitControls
-} from './libraries/threejs/OrbitControls.js'
+} from './libraries/three.js-dev/examples/jsm/controls/OrbitControls.js'
 
 import {
   FontLoader
-} from './libraries/threejs/FontLoader.js'
+} from './libraries/three.js-dev/examples/jsm/loaders/FontLoader.js'
 
 import {
   TextGeometry
-} from './libraries/threejs/TextGeometry.js'
+} from './libraries/three.js-dev/examples/jsm/geometries/TextGeometry.js'
+
+// Post-processing
+import {
+  EffectComposer
+} from './libraries/three.js-dev/examples/jsm/postprocessing/EffectComposer.js'
+import {
+  RenderPass
+} from './libraries/three.js-dev/examples/jsm/postprocessing/RenderPass.js'
+
+import { GlitchPass } from './libraries/three.js-dev/examples/jsm/postprocessing/GlitchPass.js'
 
 
 /* ------------------------------ Last.FM Data ------------------------------ */
@@ -116,6 +126,32 @@ const cursor = {
 }
 const loadingBarElement = document.querySelector('.loading-bar')
 
+// Canvas
+const canvas = document.querySelector('canvas#three')
+
+const windowSize = {
+  width: window.innerWidth,
+  height: window.innerHeight
+}
+
+const scene = new THREE.Scene();
+
+
+// Renderer
+const renderer = new THREE.WebGLRenderer({
+  canvas: canvas,
+  antialias: true
+})
+
+renderer.setPixelRatio(window.devicePixelRatio);
+renderer.setSize(windowSize.width, windowSize.height)
+renderer.setSize(window.innerWidth, window.innerHeight);
+renderer.shadowMap.enabled = true
+
+// Camera
+const camera = new THREE.PerspectiveCamera(75, windowSize.width / windowSize.height, 0.1, 1000);
+camera.position.z = 7;
+
 // Loading Manager
 const loadingManager = new THREE.LoadingManager(
   // Loaded
@@ -138,6 +174,19 @@ const loadingManager = new THREE.LoadingManager(
     console.log('LOADING MANAGER: assets loading...')
   }
 )
+
+/**
+ * Post processing
+ */
+const effectComposer = new EffectComposer(renderer)
+effectComposer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
+effectComposer.setSize(windowSize.width, windowSize.height)
+
+const renderPass = new RenderPass(scene, camera)
+effectComposer.addPass(renderPass)
+
+const glitchPass = new GlitchPass()
+effectComposer.addPass(glitchPass)
 
 /**
  * Fonts
@@ -181,35 +230,9 @@ function onPointerMove(event) {
 
 }
 
-// Canvas
-const canvas = document.querySelector('canvas#three')
-
-const windowSize = {
-  width: window.innerWidth,
-  height: window.innerHeight
-}
-
-const scene = new THREE.Scene();
-
-
-// Renderer
-const renderer = new THREE.WebGLRenderer({
-  canvas: canvas,
-  antialias: true
-})
-
-renderer.setPixelRatio(window.devicePixelRatio);
-renderer.setSize(windowSize.width, windowSize.height)
-renderer.setSize(window.innerWidth, window.innerHeight);
-renderer.shadowMap.enabled = true
-
 // Axes helper
 // const axesHelper = new THREE.AxesHelper(5);
 // scene.add(axesHelper);
-
-// Camera
-const camera = new THREE.PerspectiveCamera(75, windowSize.width / windowSize.height, 0.1, 1000);
-camera.position.z = 7;
 
 //Orbit controls
 // const controls = new OrbitControls(camera, renderer.domElement);
@@ -327,7 +350,8 @@ scene.add(pointLight)
 // scene.add(sphereTwo)
 
 function render() {
-  renderer.render(scene, camera);
+  // renderer.render(scene, camera);
+  effectComposer.render();
 }
 
 // Animation function
