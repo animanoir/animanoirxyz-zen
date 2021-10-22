@@ -22,76 +22,11 @@ import {
   RenderPass
 } from './libraries/three.js-dev/examples/jsm/postprocessing/RenderPass.js'
 
-import { GlitchPass } from './libraries/three.js-dev/examples/jsm/postprocessing/GlitchPass.js'
-
-
-/* ------------------------------ Last.FM Data ------------------------------ */
-
-//TODO Turn on Last.fm fetching before pushing
-
-const lastfmData = fetch('https://ws.audioscrobbler.com/2.0/?method=user.getRecentTracks&user=swoephowx&api_key=8d1394415d95c0771ac9f8247cc7ee17&limit=1&nowplaying=true&format=json')
-  .then(
-    response => response.json()
-  )
-  .then(data => {
-    // Removes quotes from JSON data
-    const formattedTrackname = JSON.stringify(data.recenttracks.track[0].name).replace(/["]+/g, '')
-    const formattedArtistname = JSON.stringify(data.recenttracks.track[0].artist['#text']).replace(/["]+/g, '')
-    document.getElementById("track").textContent = formattedTrackname
-    document.getElementById("artist").textContent = formattedArtistname
-  });
-
-
-/* ---------------------------------- gsap ---------------------------------- */
-
-// Animates social links to the top after 500ms
-
-setTimeout(() => {
-  for (let i = 1; i <= 5; i++) {
-    let link = '.link-' + i
-    let linkDom = document.querySelector(`.link-${i}`)
-    let speed = 100
-    TweenLite.set(link, {
-      visibility: "visible"
-    });
-    gsap.from(link, {
-      duration: 1 * i * .5,
-      y: 100,
-      opacity: 0
-    });
-    linkDom.addEventListener("mouseout", () => {
-      linkName.textContent = ''
-    })
-  }
-}, 500)
-
-
-let linkName = document.querySelector('#linkName')
-
-const linkOne = document.querySelector('.link-1')
-linkOne.addEventListener('mouseover', () => {
-  linkName.textContent = 'Twitter'
-})
-
-const linkTwo = document.querySelector('.link-2')
-linkTwo.addEventListener('mouseover', () => {
-  linkName.textContent = 'LinkedIn'
-
-
-})
-const linkThree = document.querySelector('.link-3')
-linkThree.addEventListener('mouseover', () => {
-  linkName.textContent = 'Blog (en español)'
-
-})
-const linkFour = document.querySelector('.link-4')
-linkFour.addEventListener('mouseover', () => {
-  linkName.textContent = 'More links...'
-})
-
+import {
+  GlitchPass
+} from './libraries/three.js-dev/examples/jsm/postprocessing/GlitchPass.js'
 
 /* -------------------------------- three.js -------------------------------- */
-
 
 const firstWordArray = [
   'Digital',
@@ -120,11 +55,12 @@ const secondWordArray = [
 const secondWord = secondWordArray[Math.floor(Math.random() * secondWordArray.length)]
 
 const clock = new THREE.Clock()
-const cursor = {
-  x: 0,
-  y: 0
-}
+
 const loadingBarElement = document.querySelector('.loading-bar')
+
+//ANCHOR Raycaster + mouse hover detection
+const raycaster = new THREE.Raycaster()
+const mouse = new THREE.Vector2()
 
 // Canvas
 const canvas = document.querySelector('canvas#three')
@@ -137,7 +73,7 @@ const windowSize = {
 const scene = new THREE.Scene();
 
 
-// Renderer
+//ANCHOR Renderer
 const renderer = new THREE.WebGLRenderer({
   canvas: canvas,
   antialias: true
@@ -148,11 +84,11 @@ renderer.setSize(windowSize.width, windowSize.height)
 renderer.setSize(window.innerWidth, window.innerHeight);
 renderer.shadowMap.enabled = true
 
-// Camera
+//ANCHOR Camera
 const camera = new THREE.PerspectiveCamera(75, windowSize.width / windowSize.height, 0.1, 1000);
-camera.position.z = 7;
+camera.position.z = 6;
 
-// Loading Manager
+//ANCHOR Loading Manager
 const loadingManager = new THREE.LoadingManager(
   // Loaded
   () => {
@@ -175,9 +111,7 @@ const loadingManager = new THREE.LoadingManager(
   }
 )
 
-/**
- * Post processing
- */
+//ANCHOR Post-processing
 const effectComposer = new EffectComposer(renderer)
 effectComposer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
 effectComposer.setSize(windowSize.width, windowSize.height)
@@ -188,19 +122,16 @@ effectComposer.addPass(renderPass)
 const glitchPass = new GlitchPass()
 effectComposer.addPass(glitchPass)
 
-/**
- * Fonts
- */
+//ANCHOR Fonts
 const fontLoader = new FontLoader(loadingManager)
 const matcapTexture = new THREE.TextureLoader().load('./assets/matcaps/161B1F_C7E0EC_90A5B3_7B8C9B-256px.png')
 
-fontLoader.load(
-  './assets/fonts/notosansregular.json'
-)
+let mainText
 
 fontLoader.load(
   './assets/fonts/notosansregular.json',
   (font) => {
+
     const textGeometry = new TextGeometry(
       `${firstWord} · ${secondWord}`, {
         font: font,
@@ -208,18 +139,19 @@ fontLoader.load(
         height: 0.2,
         curveSegments: 12,
         bevelEnabled: true,
-        bevelThickness: 0.03,
+        bevelThickness: 0.05,
         bevelSize: 0.02,
         bevelOffset: 0,
         bevelSegments: 5
       }
     )
+
     textGeometry.center();
     const textMaterial = new THREE.MeshMatcapMaterial({
       matcap: matcapTexture
     })
-    var text = new THREE.Mesh(textGeometry, textMaterial)
-    scene.add(text)
+    mainText = new THREE.Mesh(textGeometry, textMaterial)
+    scene.add(mainText)
   }
 )
 
@@ -296,7 +228,7 @@ const textureV3 = new THREE.VideoTexture(vidg3);
 
 const textures = [texture, textureRed, textureV3]
 
-// Video cubes
+//ANCHOR Video cubes
 const videoCubesGroup = new THREE.Group()
 const cubesQuantity = 150
 const geometry = new THREE.BoxGeometry(7, 7, 7);
@@ -349,12 +281,13 @@ scene.add(pointLight)
 // sphereTwo.scale.set(2, 2, 2)
 // scene.add(sphereTwo)
 
+// ANCHOR Render function
 function render() {
   // renderer.render(scene, camera);
   effectComposer.render();
 }
 
-// Animation function
+//ANCHOR Animation function
 const animate = function () {
   requestAnimationFrame(animate);
   const elapsedTime = clock.getElapsedTime()
@@ -364,10 +297,10 @@ const animate = function () {
   // controls.update();
 
   // Smooth camera angle movement
-  camera.position.x = cursor.x
-  // camera.position.z = (Math.cos(cursor.x * Math.PI) * 10)
-  camera.position.y = cursor.y
-  // camera.lookAt(text.position)
+  camera.position.x = mouse.x
+  // camera.position.z = (Math.cos(mouse.x * Math.PI) * 10)
+  camera.position.y = mouse.y
+  // camera.lookAt(mainText.position)
 
 
   render()
@@ -393,15 +326,31 @@ window.addEventListener('resize', () => {
 
 // Detects mouse coordinates
 window.addEventListener('mousemove', (event) => {
-  cursor.x = event.clientX / windowSize.width - 0.5
-  cursor.y = -(event.clientY / windowSize.height - 0.5)
+  mouse.x = event.clientX / windowSize.width - 0.5
+  mouse.y = -(event.clientY / windowSize.height - 0.5)
 })
 
 
 // Detects mouse's middle button click
-window.addEventListener('mousedown', (event) => {
-  if (event.button == 1 || event.buttons == 4) {
-    console.log('middle mouse');
+// window.addEventListener('mousedown', (event) => {
+//   if (event.button == 1 || event.buttons == 4) {
+//     console.log('middle mouse');
 
-  }
-});
+//   }
+// });
+
+// Detects key presses
+// window.addEventListener('keydown', function (event) {
+//   const key = event.key;
+//   console.log(key)
+
+//   if (key === 'a' || key === 'A') {
+//     camera.rotation.y += 0.03;
+//     console.log('awebo')
+//   }else if (key === 'd' || key === 'D'){
+//     camera.rotation.y -= 0.03;
+//   }
+
+// });
+
+/* ---------------------------------- p5.js --------------------------------- */
