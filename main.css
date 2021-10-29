@@ -285,8 +285,7 @@ footer {
 
 html.is-animating .transition-fade {
   opacity: 0;
-
-
+}
 /* ----------------------------- Responsiveness ----------------------------- */
 @media (max-width: 960px) {
   footer {
@@ -296,7 +295,7 @@ html.is-animating .transition-fade {
   .navbar {
     position: absolute;
     bottom: 60px;
-    right: 50%;
+    padding-left: 2.5rem;
   }
   #links {
     width: 100%;
@@ -305,6 +304,6 @@ html.is-animating .transition-fade {
   #linkName {
     display: none;
   }
-}}
+}
 
 /*# sourceMappingURL=main.css.map*/
