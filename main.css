@@ -130,6 +130,16 @@ footer {
 
 .navbar {
   font-size: 1.5rem;
+  display: flex;
+}
+
+.navbar p{
+  cursor: pointer;
+  margin-block: 0;
+}
+
+.navbar p:hover {
+  color: red;
 }
 
 .font-roboto {
