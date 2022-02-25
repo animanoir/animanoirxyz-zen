@@ -1,0 +1,4 @@
+This is a Brave Rewards publisher verification file.
+
+Domain: animanoir.xyz
+Token: 9835f5fd480d376cb781afab5ee79008c344e11cf4dd78a36101a2be9cf6887c
